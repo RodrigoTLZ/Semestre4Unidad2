@@ -1,0 +1,100 @@
+﻿<Window x:Class="Proyecto_U2___Reposteria.Views.PostresView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Proyecto_U2___Reposteria.Views"
+        xmlns:models="clr-namespace:Proyecto_U2___Reposteria.Models"
+        xmlns:viewmodels="clr-namespace:Proyecto_U2___Reposteria.ViewModels"
+        mc:Ignorable="d"
+        Title="Tienda de reposteria" Height="700" Width="900">
+    <Window.DataContext>
+        <viewmodels:PostresViewModel x:Name="pvm"></viewmodels:PostresViewModel>
+    </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type models:Postre}">
+            <local:PostreControl></local:PostreControl>
+        </DataTemplate>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="Transparent"></Setter>
+            <Setter Property="BorderBrush" Value="Transparent"></Setter>
+            <Setter Property="Width" Value="60"></Setter>
+            <Setter Property="Height" Value="70"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="HotPink"></Setter>
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".5*"/>
+            <RowDefinition Height=".5*"/>
+            <RowDefinition Height=".3*"/>
+            <RowDefinition Height=".5*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="1" Background="SaddleBrown" CornerRadius="0,0,40,40">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="7" Opacity=".2"></DropShadowEffect>
+            </Border.Effect>
+        </Border>
+        <Border Grid.Row="0" Background="Pink"></Border>
+        <Border Grid.Row="0" Background="LightGoldenrodYellow" BorderThickness="0,0,0,10"></Border>
+        <Image Height="180" Source="https://seeklogo.com/images/D/dulce-canela-cupcakes-logo-703A37ADF0-seeklogo.com.png" Grid.RowSpan="2"></Image>
+
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,20,0,0">
+            <Button Margin="80,00,100,0" Command="{Binding CambiarVistaCommand}" CommandParameter="Agregar">
+                <StackPanel>
+                    <Image Source="https://www.pngkey.com/png/full/13-137853_cherry-vector-transparent-background-cartoon-cherry-no-background.png" Width="36"></Image>
+                    <Label FontWeight="Bold">Agregar</Label>
+                </StackPanel>
+            </Button>
+            <Button Margin="0,0,100,0" Command="{Binding CambiarVistaCommand}" CommandParameter="Editar" Click="Button_Click_1">
+                <StackPanel>
+                    <Image Source="https://www.pngkey.com/png/full/13-137853_cherry-vector-transparent-background-cartoon-cherry-no-background.png" Width="36"></Image>
+                    <Label FontWeight="Bold">Editar</Label>
+                </StackPanel>
+            </Button>
+            <Button Margin="0,0,80,0" Click="Button_Click">
+                <StackPanel>
+                    <Image Source="https://www.pngkey.com/png/full/13-137853_cherry-vector-transparent-background-cartoon-cherry-no-background.png" Width="36"></Image>
+                    <Label FontWeight="Bold">Eliminar</Label>
+                </StackPanel>
+            </Button>
+        </WrapPanel>
+        
+        <StackPanel Grid.Row="3">
+            <TextBlock Margin="20,0,0,10" FontWeight="Bold" Foreground="DeepPink" FontSize="22" FontFamily="Outfit Medium">¡Mira nuestros productos!</TextBlock>
+            <ListBox SelectedItem="{Binding Postre}" ItemsSource="{Binding ListaDePostres}" Height="100" Margin="10">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"></VirtualizingStackPanel>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </StackPanel>
+        <ContentControl Grid.RowSpan="2">
+            <ContentControl.Resources>
+                <local:VerPostresView x:Key="detalles" Loaded="VerPostresView_Loaded"></local:VerPostresView>
+                <local:AgregarEditarPostre x:Key="agregar"></local:AgregarEditarPostre>
+            </ContentControl.Resources>
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Vista}" Value="Ver">
+                            <Setter Property="Content" Value="{StaticResource detalles}"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Vista}" Value="Agregar">
+                            <Setter Property="Content" Value="{StaticResource agregar}"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Vista}" Value="Editar">
+                            <Setter Property="Content" Value="{StaticResource agregar}"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </Grid>
+</Window>
